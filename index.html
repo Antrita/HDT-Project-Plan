@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+    <title>E-HDT Charging Infrastructure Project</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --notion-black: #37352f;
+            --notion-gray: #f7f6f3;
+            --notion-light-gray: #ebeae8;
+            --notion-blue: #2383E2;
+            --notion-red: #E53E3E;
+            --notion-yellow: #FFC107;
+            --notion-green: #16A34A;
+            --notion-pink: #e257b9;
+            --notion-purple: #9747FF;
+            --notion-orange: #F97316;
+            --border-radius: 4px;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            color: var(--notion-black);
+            line-height: 1.6;
+            background-color: var(--notion-gray);
+            padding-bottom: 50px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-container {
+            display: block;
+            flex: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: white;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            border-right: 1px solid var(--notion-light-gray);
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .content {
+            margin-left: 250px;
+            padding: 20px 40px;
+            flex: 1;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            margin-top: 1.5em;
+            margin-bottom: 0.5em;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-top: 0.5em;
+        }
+
+        h2 {
+            font-size: 1.7em;
+            font-weight: 600;
+            border-bottom: 1px solid var(--notion-light-gray);
+            padding-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1em;
+        }
+
+        .callout {
+            border-radius: var(--border-radius);
+            padding: 16px;
+            margin: 20px 0;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .callout.info {
+            background-color: rgba(35, 131, 226, 0.14);
+        }
+
+        .callout.warning {
+            background-color: rgba(255, 193, 7, 0.14);
+        }
+
+        .callout-icon {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        .info .callout-icon {
+            color: var(--notion-blue);
+        }
+
+        .warning .callout-icon {
+            color: var(--notion-yellow);
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--notion-light-gray);
+        }
+
+        th {
+            font-weight: 600;
+            color: #666;
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: 500;
+            margin-right: 5px;
+        }
+
+        .badge-blue {
+            background-color: rgba(35, 131, 226, 0.14);
+            color: var(--notion-blue);
+        }
+
+        .badge-green {
+            background-color: rgba(22, 163, 74, 0.14);
+            color: var(--notion-green);
+        }
+
+        .badge-yellow {
+            background-color: rgba(255, 193, 7, 0.14);
+            color: #B45309;
+        }
+
+        .badge-red {
+            background-color: rgba(229, 62, 62, 0.14);
+            color: var(--notion-red);
+        }
+
+        .badge-purple {
+            background-color: rgba(151, 71, 255, 0.14);
+            color: var(--notion-purple);
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .pill-blue {
+            background-color: var(--notion-blue);
+            color: white;
+        }
+
+        .pill-green {
+            background-color: var(--notion-green);
+            color: white;
+        }
+
+        .pill-yellow {
+            background-color: var(--notion-yellow);
+            color: #333;
+        }
+
+        .pill-red {
+            background-color: var(--notion-red);
+            color: white;
+        }
+
+        .pill-purple {
+            background-color: var(--notion-purple);
+            color: white;
+        }
+
+        .pill-orange {
+            background-color: var(--notion-orange);
+            color: white;
+        }
+
+        .pill-pink {
+            background-color: var(--notion-pink);
+            color: white;
+        }
+
+        ul, ol {
+            margin-left: 1.5em;
+            margin-bottom: 1em;
+        }
+
+        li {
+            margin-bottom: 0.5em;
+        }
+
+        .toggle {
+            margin: 15px 0;
+        }
+
+        .toggle-header {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            padding: 8px 0;
+        }
+
+        .toggle-icon {
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-content {
+            padding: 10px 0 10px 24px;
+            display: none;
+        }
+
+        .toggle.open .toggle-icon {
+            transform: rotate(90deg);
+        }
+
+        .toggle.open .toggle-content {
+            display: block;
+        }
+
+        /* Two-column navigation */
+        .nav-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .nav-column {
+            flex: 1;
+            min-width: 120px;
+            padding-right: 10px;
+        }
+
+        .nav-menu {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .nav-item {
+            padding: 6px 8px;
+            border-radius: var(--border-radius);
+            margin-bottom: 2px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 14px;
+        }
+
+        .nav-item:hover {
+            background-color: var(--notion-light-gray);
+        }
+
+        .nav-item.active {
+            background-color: rgba(35, 131, 226, 0.1);
+            color: var(--notion-blue);
+            font-weight: 500;
+        }
+
+        .section {
+            display: none;
+            padding: 20px 0;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .progress-container {
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: var(--notion-light-gray);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--notion-blue);
+            width: 25%; /* Example progress */
+            border-radius: 4px;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .status-pill {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .status-planning {
+            background-color: rgba(151, 71, 255, 0.14);
+            color: var(--notion-purple);
+        }
+
+        .button {
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .button-primary {
+            background-color: var(--notion-blue);
+            color: white;
+        }
+
+        .button-primary:hover {
+            background-color: #1b67b3;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            margin: 30px 0 15px;
+        }
+
+        .phase-title {
+            margin: 0;
+            margin-right: 15px;
+        }
+
+        .flex-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .flex-col {
+            flex: 1;
+        }
+
+        .card-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--notion-black);
+        }
+
+        .card-subtitle {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .tab-container {
+            margin: 20px 0;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--notion-light-gray);
+            margin-bottom: 15px;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: -1px;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            border-bottom: 2px solid var(--notion-blue);
+            color: var(--notion-blue);
+            font-weight: 500;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--notion-black);
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-title {
+            text-transform: uppercase;
+            font-size: 0.8em;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .weekly-planning {
+            padding: 20px;
+            background-color: white;
+            border-radius: var(--border-radius);
+            margin: 20px 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .team-header {
+            background-color: #f9f9f9;
+            font-weight: 600;
+        }
+
+        .data-team {
+            background-color: rgba(35, 131, 226, 0.05);
+        }
+
+        .dashboard-team {
+            background-color: rgba(22, 163, 74, 0.05);
+        }
+
+        .header-bar {
+            background-color: white;
+            padding: 15px 40px;
+            margin-left: 250px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+
+        .header-title {
+            font-weight: 600;
+            font-size: 1.2em;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .toc-container {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            background-color: rgba(35, 131, 226, 0.05);
+        }
+
+        .toc-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--notion-blue);
+        }
+
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .toc-item {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .toc-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .toc-item-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--notion-black);
+        }
+
+        .toc-item-description {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .highlight {
+            display: inline-block;
+            padding: 0 4px;
+            border-radius: 3px;
+            background-color: rgba(255, 193, 7, 0.2);
+            font-weight: 500;
+        }
+
+        .weekly-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .weekly-table th, .weekly-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--notion-light-gray);
+        }
+
+        .weekly-table th {
+            font-weight: 600;
+            background-color: #f1f1f1;
+        }
+
+        .data-team-row {
+            background-color: rgba(35, 131, 226, 0.05);
+        }
+
+        .dashboard-team-row {
+            background-color: rgba(22, 163, 74, 0.05);
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                border-right: none;
+                border-bottom: 1px solid var(--notion-light-gray);
+                padding: 15px;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .header-bar {
+                margin-left: 0;
+                padding: 15px;
+            }
+
+            .flex-row {
+                flex-direction: column;
+            }
+
+            .toc-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">E-HDT Project Dashboard</div>
+        <div class="sidebar-section">
+            <div class="sidebar-title">Navigation</div>
+            </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navItems = document.querySelectorAll('.nav-item');
+            const sections = document.querySelectorAll('.section');
+            const mainContent = document.querySelector('.content');
+
+            // Add click event to navigation items
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    // Remove active class from all nav items and sections
+                    navItems.forEach(navItem => navItem.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+
+                    // Add active class to clicked item and corresponding section
+                    item.classList.add('active');
+                    const targetSection = document.getElementById(item.dataset.target);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const tileItems = document.querySelectorAll('.toc-item');
+
+        tileItems.forEach(tile => {
+            tile.addEventListener('click', () => {
+                const targetSection = tile.getAttribute('data-target');
+                
+                // Remove any existing sample pages
+                const existingSamplePage = document.querySelector('.sample-page');
+                if (existingSamplePage) {
+                    existingSamplePage.remove();
+                }
+
+                // Sample page details based on the tile clicked
+                const samplePageData = {
+                    'eu-use-case': {
+                        title: 'EU Use Case for Electric Heavy-Duty Transport',
+                        description: 'Detailed exploration of transcontinental logistics route planning across TEN-T corridors, focusing on real-time charging infrastructure availability monitoring for electric heavy-duty trucks.'
+                    },
+                    'deliverables': {
+                        title: 'Project Deliverables Overview',
+                        description: 'Comprehensive breakdown of all project outputs, including technical specifications, data collection modules, visualization components, and export systems.'
+                    },
+                    'specs': {
+                        title: 'E-HDT Charging Technical Specifications',
+                        description: 'In-depth analysis of technical requirements for electric heavy-duty truck charging, including detailed specifications for connector types, power levels, and infrastructure considerations.'
+                    },
+                    'implementation': {
+                        title: 'Implementation Scope and Open Source Strategy',
+                        description: 'Detailed approach to developing the project using open-source APIs and technologies, highlighting the technical architecture and development methodology.'
+                    },
+                    'final-goal': {
+                        title: 'Project Objectives and Business Impact',
+                        description: 'Comprehensive overview of the project\'s strategic objectives, focusing on the business impact for electric heavy-duty truck operations and sustainable transportation.'
+                    },
+                    'weekly': {
+                        title: 'Detailed Weekly Development Schedule',
+                        description: 'Week-by-week breakdown of development activities for both the Data and Dashboard teams, showcasing the project\'s progressive implementation strategy.'
+                    }
+                };
+
+                // Create sample page if data exists
+                if (samplePageData[targetSection]) {
+                    const samplePage = createSamplePage(
+                        samplePageData[targetSection].title,
+                        samplePageData[targetSection].description,
+                        targetSection
+                    );
+                    document.querySelector('.content').appendChild(samplePage);
+                }
+            });
+        });
+
+        // Function to create sample page
+        function createSamplePage(title, description, targetSection) {
+            const samplePage = document.createElement('div');
+            samplePage.className = 'sample-page';
+            samplePage.innerHTML = `
+                <div class="sample-page-header">
+                    <button class="go-back-btn">
+                        <i class="fas fa-arrow-left"></i> Go Back
+                    </button>
+                    <h1>${title}</h1>
+                </div>
+                <div class="sample-page-content">
+                    <p>${description}</p>
+                    <div class="sample-page-actions">
+                        <button class="goto-section-btn" data-target="${targetSection}">
+                            Go to Section <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Styling 
+            samplePage.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 250px;
+                width: calc(100% - 250px);
+                height: 100%;
+                background-color: var(--notion-gray);
+                z-index: 1000;
+                overflow-y: auto;
+                padding: 40px;
+                box-sizing: border-box;
+                animation: slideIn 0.3s ease-out;
+            `;
+
+            // Add go back functionality
+            const goBackBtn = samplePage.querySelector('.go-back-btn');
+            goBackBtn.addEventListener('click', () => {
+                document.querySelector('.content').removeChild(samplePage);
+            });
+
+            // Add go to section functionality
+            const goToSectionBtn = samplePage.querySelector('.goto-section-btn');
+            goToSectionBtn.addEventListener('click', () => {
+                // Remove sample page
+                document.querySelector('.content').removeChild(samplePage);
+                
+                // Activate corresponding navigation item and section
+                const navItem = document.querySelector(`.nav-item[data-target="${targetSection}"]`);
+                const section = document.getElementById(targetSection);
+                
+                if (navItem && section) {
+                    // Remove active classes
+                    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+                    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+                    
+                    // Add active classes
+                    navItem.classList.add('active');
+                    section.classList.add('active');
+                }
+            });
+
+            return samplePage;
+        }
+    });
+</script>
+
+</html>
+            <div class="nav-container">
+                <div class="nav-column">
+                    <ul class="nav-menu">
+                        <li class="nav-item active" data-target="overview">Overview</li>
+                        <li class="nav-item" data-target="eu-use-case">EU Use Case</li>
+                        <li class="nav-item" data-target="deliverables">Deliverables</li>
+                        <li class="nav-item" data-target="specs">E-HDT Specifications</li>
+                    </ul>
+                </div>
+                <div class="nav-column">
+                    <ul class="nav-menu">
+                        <li class="nav-item" data-target="implementation">Implementation Scope</li>
+                        <li class="nav-item" data-target="final-goal">Final Goal</li>
+                        <li class="nav-item" data-target="weekly">Weekly Planning</li>
+                        <li class="nav-item" data-target="team-structure">Team Structure</li>
+                        <li class="nav-item" data-target="phases">Project Phases</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-title">Project Progress</div>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-stats">
+                    <span>Planning Phase</span>
+                    <span>25%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <div class="header-bar">
+    <div class="header-title">E-HDT Charging Infrastructure Project</div>
+</div>
+
+    
+    <div class="content">
+        <!-- Overview Section with Content Index -->
+        <section id="overview" class="section active">
+            <div class="dashboard-header">
+                <h1>E-HDT Charging Infrastructure Web Scraper Project</h1>
+                <span class="status-pill status-planning">Planning Phase</span>
+            </div>
+
+            <div class="toc-container">
+                <div class="toc-title">Project Plan Contents</div>
+                <div class="toc-grid">
+                    <div class="toc-item" data-target="eu-use-case">
+                        <div class="toc-item-title"><i class="fas fa-map-marker-alt" style="color: var(--notion-red);"></i> EU Use Case</div>
+                        <div class="toc-item-description">Transcontinental logistics route planning across TEN-T corridors with <span class="highlight">real-time availability monitoring</span></div>
+                    </div>
+                    <div class="toc-item" data-target="deliverables">
+                        <div class="toc-item-title"><i class="fas fa-clipboard-check" style="color: var(--notion-green);"></i> Detailed Deliverables</div>
+                        <div class="toc-item-description">Comprehensive list of all project outputs with <span class="highlight">technical specifications</span></div>
+                    </div>
+                    <div class="toc-item" data-target="specs">
+                        <div class="toc-item-title"><i class="fas fa-charging-station" style="color: var(--notion-blue);"></i> E-HDT Specifications</div>
+                        <div class="toc-item-description">Technical requirements for heavy-duty charging including <span class="highlight">connector types and power levels</span></div>
+                    </div>
+                    <div class="toc-item" data-target="implementation">
+                        <div class="toc-item-title"><i class="fas fa-code" style="color: var(--notion-purple);"></i> Implementation Scope</div>
+                        <div class="toc-item-description">Development approach using <span class="highlight">open source APIs</span> and technologies</div>
+                    </div>
+                    <div class="toc-item" data-target="team-structure">
+    <div class="toc-item-title">
+        <i class="fas fa-users" style="color: var(--notion-purple);"></i> Team Structure
+    </div>
+    <div class="toc-item-description">Dual team approach with <span class="highlight">parallel development</span> strategies</div>
+</div>
+                    <div class="toc-item" data-target="final-goal">
+                        <div class="toc-item-title"><i class="fas fa-flag-checkered" style="color: var(--notion-orange);"></i> Final Goal</div>
+                        <div class="toc-item-description">Project objective and <span class="highlight">business impact</span> for E-HDT operations</div>
+                    </div>
+                    <div class="toc-item" data-target="weekly">
+                        <div class="toc-item-title"><i class="fas fa-calendar-alt" style="color: var(--notion-pink);"></i> Weekly Planning</div>
+                        <div class="toc-item-description">Detailed week-by-week development schedule for <span class="highlight">both teams</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>Executive Summary</h3>
+                <p>This document outlines the implementation plan for developing a specialized web-based tool focused on collecting, processing, and visualizing charging station data specifically for Electric Heavy-Duty Trucks (E-HDT). The solution addresses critical infrastructure planning needs by providing real-time availability information and analysis of high-capacity charging stations suitable for commercial electric trucking operations.</p>
+                <p>The proposed system leverages Firebase's real-time database capabilities combined with open-source technologies to deliver a cost-effective yet powerful analysis platform. By focusing specifically on E-HDT requirements, this tool fills a significant gap in current planning resources that typically don't differentiate between passenger vehicle chargers and the high-power infrastructure needed for commercial transport.</p>
+            </div>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="card">
+                        <div class="card-title">Project Timeline</div>
+                        <div class="card-subtitle">12-week implementation plan</div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                            <div class="progress-stats">
+                                <span>Planning</span>
+                                <span>Development</span>
+                                <span>Delivery</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <span class="pill pill-blue" data-target="phase1">Phase 1: Weeks 1-3</span>
+                            <span class="pill pill-green" data-target="phase2">Phase 2: Weeks 4-6</span>
+                            <span class="pill pill-purple" data-target="phase3">Phase 3: Weeks 7-10</span>
+                            <span class="pill pill-orange" data-target="phase4">Phase 4: Weeks 11-12</span>
+                        </div>
+                    </div>
+                </div>
+               <div class="flex-col">
+    <div class="card">
+        <div class="card-title">Team Structure</div>
+        <div class="card-subtitle">Dual team approach for parallel development</div>
+        <div>
+            <h4><i class="fas fa-laptop-code" style="color: var(--notion-green);"></i> Dashboard Team (Frontend)</h4>
+            <ul>
+                <li>User interface development</li>
+                <li>Interactive visualizations</li>
+                <li>Map-based charging infrastructure representation</li>
+                <li>Real-time Firebase data binding</li>
+                <li>Filter and export functionality</li>
+            </ul>
+            <h4><i class="fas fa-database" style="color: var(--notion-blue);"></i> Data Team (Web Scraping & Analysis)</h4>
+            <ul>
+                <li>Real-time OpenChargeMap API data collection</li>
+                <li>E-HDT charger classification</li>
+                <li>Corridor and spatial analysis</li>
+                <li>Firebase data structure optimization</li>
+            </ul>
+        </div>
+    </div>
+</div>
+            <div class="callout info">
+                <div class="callout-icon"><i class="fas fa-info-circle"></i></div>
+                <div>
+                    <p><strong>Primary Goal:</strong> Create a comprehensive, real-time dashboard for monitoring E-HDT compatible charging infrastructure with filtering, analysis, and export capabilities.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- E-HDT Specifications Section -->
+        <section id="specs" class="section">
+            <div class="dashboard-header">
+                <h1>E-HDT Charging Specifications & Requirements</h1>
+                <span class="status-pill status-planning">Planning Phase</span>
+            </div>
+            
+            <div class="card">
+                <p>Electric Heavy-Duty Trucks require specialized charging infrastructure with significantly different specifications than passenger EVs. Understanding these requirements is essential for effective data collection and analysis:</p>
+
+                <h3>Power Requirements</h3>
+                <ul>
+                    <li>Minimum power output of 150kW, with most commercial operations preferring 350kW+ for faster charging</li>
+                    <li>Many newer E-HDT models support charging rates up to 1MW with Megawatt Charging System (MCS)</li>
+                    <li>Battery capacities ranging from 300-1000kWh, significantly larger than passenger vehicles (50-100kWh)</li>
+                </ul>
+
+                <h3>Connector Types for High-Power E-HDT Charging in Europe</h3>
+<div style="margin: 15px 0;">
+    <span class="pill pill-blue">CCS Type 2</span>
+    <span class="pill pill-purple">Megawatt Charging System (MCS)</span>
+    <span class="pill pill-green">High Power Charging (HPC)</span>
+</div>
+
+<p>The European electric heavy-duty truck charging infrastructure relies on three primary high-power connector standards:</p>
+<ul>
+    <li><strong>Combined Charging System (CCS) Type 2</strong>
+        <ul>
+            <li>Primary charging standard for electric vehicles in Europe</li>
+            <li>Power output range: Up to 500 kW</li>
+            <li>Widely deployed across existing charging networks</li>
+        </ul>
+    </li>
+    <li><strong>Megawatt Charging System (MCS)</strong>
+        <ul>
+            <li>Specifically designed for heavy-duty electric vehicles</li>
+            <li>Power output range: Up to 3.75 MW</li>
+            <li>Emerging standard for ultra-fast charging</li>
+            <li>Developed by a consortium including Daimler, Traton, and Volvo Group</li>
+        </ul>
+    </li>
+    <li><strong>High Power Charging (HPC) Connector</strong>
+        <ul>
+            <li>Advanced charging connector for commercial electric vehicles</li>
+            <li>Power output range: 350 kW to 1 MW</li>
+            <li>Developed by charging infrastructure manufacturers</li>
+            <li>Supports rapid charging for electric trucks and buses</li>
+        </ul>
+    </li>
+</ul>
+
+<p>These standards are critical for ensuring interoperability and efficient charging across the European transportation network, particularly along the Trans-European Transport Network (TEN-T) corridors.</p>
+
+                <h3>Physical Accessibility Requirements</h3>
+                <ul>
+                    <li>Sufficient space for large vehicle maneuvering (minimum 16m turning radius)</li>
+                    <li>Pull-through charging layouts rather than parking bay configurations</li>
+                    <li>Height clearance accommodations (4.5m minimum)</li>
+                    <li>Reinforced pavement to support heavy vehicle weight</li>
+                </ul>
+
+                <h3>Availability Considerations</h3>
+                <ul>
+                    <li>Uptime requirements higher than passenger vehicle network (99%+ target)</li>
+                    <li>Multiple charging points per location for redundancy</li>
+                    <li>Reservation systems increasingly important for fleet operations</li>
+                </ul>
+            </div>
+
+            <div class="callout warning">
+                <div class="callout-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <div>
+                    <p><strong>Implementation Note:</strong> The Data Team will be responsible for implementing filters based on these specifications to identify charging stations truly suitable for E-HDT operations from the OpenChargeMap API data.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Implementation Scope Section -->
+        <section id="implementation" class="section">
+            <div class="dashboard-header">
+                <h1>Scope of Implementation with Open Source APIs</h1>
+                <span class="status-pill status-planning">Planning Phase</span>
+            </div>
+            
+            <div class="card">
+                <p>The project will be implemented using entirely open-source technologies and APIs to ensure cost-effectiveness and sustainability:</p>
+
+                <h3>Core Data Sources</h3>
+                <ul>
+                    <li><strong>OpenChargeMap API</strong> provides the foundation for charging station data, offering comprehensive coverage across Europe including the TEN-T network. The API provides station locations, connector types, power levels, and basic availability information.</li>
+                    <li><strong>OpenStreetMap API</strong> will be used to identify and analyze transport corridors, particularly focusing on routes suitable for heavy-duty vehicles.</li>
+                </ul>
+
+                <h3>Key Open Source Technologies</h3>
+                <ul>
+                    <li><strong>Leaflet.js</strong> for interactive mapping without licensing costs</li>
+                    <li><strong>GeoFire</strong> for optimized geospatial queries within Firebase</li>
+                    <li><strong>GeoPandas</strong> for spatial data processing and analysis</li>
+                    <li><strong>Plotly and Dash</strong> for data visualization components</li>
+                    <li><strong>Firebase</strong> platform (using free tier for development, pay-as-you-go for production)</li>
+                </ul>
+
+                <h3>Implementation Scope Boundaries</h3>
+                <ul>
+                    <li>The system will focus on the TEN-T network corridors within the EU as a priority</li>
+                    <li>Real-time availability data will be limited to what OpenChargeMap provides, supplemented by historical analysis</li>
+                    <li>The initial version will support Dutch, German, and Italian languages for the UI</li>
+                    <li>Mobile responsiveness will be implemented but native mobile apps are outside scope</li>
+                    <li>Integration will be primarily through data export rather than direct API connections to third-party systems</li>
+                </ul>
+            </div>
+
+            <div class="callout info">
+                <div class="callout-icon"><i class="fas fa-info-circle"></i></div>
+                <div>
+                    <p>This approach ensures the project can be implemented with minimal licensing costs while providing significant value through intelligent processing and visualization of openly available data.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Goal Section -->
+        <section id="final-goal" class="section">
+            <div class="dashboard-header">
+                <h1>Final Goal</h1>
+                <span class="status-pill status-planning">Planning Phase</span>
+            </div>
+            
+            <div class="card">
+                <p>The ultimate goal of this project is to accelerate the transition to electric heavy-duty transport across European corridors by providing the missing link between raw charging infrastructure data and actionable operational intelligence.</p>
+
+                <p>This tool will enable:</p>
+                <ul>
+                    <li>Data-driven planning of E-HDT operations with confidence in charging availability</li>
+                    <li>Identification of infrastructure gaps to guide both route planning and advocacy for new infrastructure</li>
+                    <li>Real-time monitoring of critical charging resources to avoid operational disruptions</li>
+                    <li>Seamless integration of charging infrastructure data into existing fleet management workflows</li>
+                </ul>
+
+                <p>By focusing specifically on the unique requirements of E-HDT operations, this solution addresses a critical gap in existing tools that primarily serve passenger vehicle use cases, ultimately helping logistics operators meet sustainability goals while maintaining operational efficiency.</p>
+            </div>
+        </section>
+
+        <!-- Weekly Planning Section -->
+        <section id="weekly" class="section">
+            <div class="dashboard-header">
+                <h1>Detailed Weekly Development Plan</h1>
+                <span class="status-pill status-planning">Planning Phase</span>
+            </div>
+            
+            <div class="card">
+                <h3>Phase 1: Foundations & Data Collection (Weeks 1-3)</h3>
+                
+                <table class="weekly-table">
+                    <thead>
+                        <tr>
+                            <th width="15%">Week</th>
+                            <th width="35%">Data Team</th>
+                            <th width="35%">Dashboard Team</th>
+                            <th width="15%">Deliverables</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Week 1</strong></td>
+                            <td class="data-team-row">
+                                <ul>
+                                    <li>Set up development environment</li>
+                                    <li>Develop OpenChargeMap API connector</li>
+                                    <li>Create E-HDT filtering parameters</li>
+                                    <li>Implement data validation</li>
+                                </ul>
+                            </td>
+                            <td class="dashboard-team-row">
+                                <ul>
+                                    <li>Create project repository structure</li>
+                                    <li>Design wireframes and UI mockups</li>
+                                    <li>Set up Firebase project</li>
+                                    <li>Develop application shell</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>API connector</li>
+                                    <li>Project structure</li>
+                                    <li>UI mockups</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 2</strong></td>
+                            <td class="data-team-row">
+                                <ul>
+                                    <li>Design Firebase schema for geospatial data</li>
+                                    <li>Implement GeoFire integration</li>
+                                    <li>Create data transformation pipeline</li>
+                                    <li>Develop charger classification algorithms</li>
+                                </ul>
+                            </td>
+                            <td class="dashboard-team-row">
+                                <ul>
+                                    <li>Implement authentication flows</li>
+                                    <li>Create dashboard layout</li>
+                                    <li>Develop data loading services</li>
+                                    <li>Implement basic map view</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Database schema</li>
+                                    <li>Authentication system</li>
+                                    <li>Basic map interface</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 3</strong></td>
+                            <td class="data-team-row">
+                                <ul>
+                                    <li>Create Cloud Functions for data collection</li>
+                                    <li>Implement availability monitoring</li>
+                                    <li>Develop change detection logic</li>
+                                    <li>Create corridor identification system</li>
+                                </ul>
+                            </td>
+                            <td class="dashboard-team-row">
+                                <ul>
+                                    <li>Implement real-time data binding</li>
+                                    <li>Create loading states and indicators</li>
+                                    <li>Develop station detail view</li>
+                                    <li>Implement basic filtering</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Automated data collection</li>
+                                    <li>Interactive map</li>
+                                    <li>Basic filtering</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Phase 2: Analysis & Core Visualization (Weeks 4-6)</h3>
+                
+                <table class="weekly-table">
+                    <thead>
+                        <tr>
+                            <th width="15%">Week</th>
+                            <th width="35%">Data Team</th>
+                            <th width="35%">Dashboard Team</th>
+                            <th width="15%">Deliverables</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Week 4</strong></td>
+                            <td class="data-team-row">
+                                <ul>
+                                    <li>Implement GeoPandas processing module</li>
+                                    <li>Create transport corridor analysis</li>
+                                    <li>Develop coverage calculation algorithms</li>
+                                    <li>Implement charger density analysis</li>
+                                </ul>
+                            </td>
+                            <td class="dashboard-team-row">
+                                <ul>
+                                    <li>Enhance map component with custom controls</li>
+                                    <li>Implement marker clustering</li>
+                                    <li>Create detailed station popups</li>
+                                    <li>Develop layer controls</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Spatial analysis module</li>
+                                    <li>Enhanced map visualization</li>
+                                    <li>Corridor identification</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 5</strong></td>
+                            <td class="data-team-row">
+                                <ul>
+                                    <li>Implement gap detection algorithms</li>
+                                    <li>Create E-HDT range calculations</li>
+                                    <li>Develop corridor comparison functions</li>
+                                    <li>Create optimal placement algorithms</li>
+                                </ul>
+                            </td>
+                            <td class="dashboard-team-row">
+                                <ul>
+                                    <li>Create advanced filtering interface</li>
+                                    <li>Implement corridor visualization</li>
+                                    <li>Develop coverage gap overlay</li>
+                                    <li>Create corridor statistics components</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Gap detection system</li>
+                                    <li>Advanced filtering</li>
+                                    <li>Corridor visualization</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 6</strong></td>
+                            <td class="data-team-row">
+                                <ul>
+                                    <li>Develop historical availability analysis</li>
+                                    <li>Create predictive availability models</li>
+                                    <li>Implement time-series storage</li>
+                                    <li>Develop underservice detection</li>
+                                </ul>
+                            </td>
+                            <td class="dashboard-team-row">
+                                <ul>
+                                    <li>Create time-based filtering controls</li>
+                                    <li>Implement availability visualizations</li>
+                                    <li>Develop time-series charts</li>
+                                    <li>Create temporal-spatial heatmaps</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Temporal analysis system</li>
+                                    <li>Time-series visualizations</li>
+                                    <li>Availability predictions</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Phase 3: Advanced Features & Integration (Weeks 7-10)</h3>
+                
+                <table class="weekly-table">
+                    <thead>
+                        <tr>
+                            <th width="15%">Week</th>
+                            <th width="35%">Data Team</th>
+                            <th width="35%">Dashboard Team</th>
+                            <th width="15%">Deliverables</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Week 7</strong></td>
+                            <td class="data-team-row">
+                                <ul>
+                                    <li>Create data aggregation services</li>
+                                    <li>Implement network adequacy metrics</li>
+                                    <li>Develop infrastructure gap analysis</li>
+                                    <li>Create custom query endpoints</li>
+                                </ul>
+                            </td>
+                            <td class="dashboard-team-row">
+                                <ul>
+                                    <li>Create metrics dashboard with KPIs</li>
+                                    <li>Implement dashboard customization</li>
+                                    <li>Develop saved views system</li>
+                                    <li>Create responsive layouts</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Dashboard metrics</li>
+                                    <li>Customizable interface</li>
+                                    <li>Saved views system</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 8</strong></td>
+                            <td class="data-team-row">
+                                <ul>
+                                    <li>Implement E-HDT route optimization</li>
+                                    <li>Create charging stop recommendations</li>
+                                    <li>Develop multi-stop planning</li>
+                                    <li>Create battery depletion models</li>
+                                </ul>
+                            </td>
+                            <td class="dashboard-team-row">
+                                <ul>
+                                    <li>Create route planning interface</li>
+                                    <li>Implement charging stop visualization</li>
+                                    <li>Develop route export functionality</li>
+                                    <li>Create time/energy estimates</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Route optimization</li>
+                                    <li>Route planning UI</li>
+                                    <li>Multi-stop planning</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 9</strong></td>
+                            <td class="data-team-row">
+                                <ul>
+                                    <li>Optimize real-time synchronization</li>
+                                    <li>Implement advanced filtering logic</li>
+                                    <li>Create visualization aggregations</li>
+                                    <li>Develop differential updates</li>
+                                </ul>
+                            </td>
+                            <td class="dashboard-team-row">
+                                <ul>
+                                    <li>Create dynamic filtering interface</li>
+                                    <li>Implement cross-filtering between components</li>
+                                    <li>Develop availability notifications</li>
+                                    <li>Create comparative view components</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Advanced filtering system</li>
+                                    <li>Real-time notifications</li>
+                                    <li>Cross-component filtering</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 10</strong></td>
+                            <td class="data-team-row">
+                                <ul>
+                                    <li>Conduct query performance analysis</li>
+                                    <li>Implement optimized indexing</li>
+                                    <li>Create data partitioning strategy</li>
+                                    <li>Develop benchmark tests</li>
+                                </ul>
+                            </td>
+                            <td class="dashboard-team-row">
+                                <ul>
+                                    <li>Finalize visualization components</li>
+                                    <li>Implement component communication</li>
+                                    <li>Create cohesive visual design</li>
+                                    <li>Develop onboarding guidance</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Performance optimization</li>
+                                    <li>Integrated visualization</li>
+                                    <li>User onboarding</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Phase 4: Export & Finalization (Weeks 11-12)</h3>
+                
+                <table class="weekly-table">
+                    <thead>
+                        <tr>
+                            <th width="15%">Week</th>
+                            <th width="35%">Data Team</th>
+                            <th width="35%">Dashboard Team</th>
+                            <th width="15%">Deliverables</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Week 11</strong></td>
+                            <td class="data-team-row">
+                                <ul>
+                                    <li>Implement CSV export with field selection</li>
+                                    <li>Create KML export service</li>
+                                    <li>Develop Shapefile export capability</li>
+                                    <li>Build report generation templates</li>
+                                </ul>
+                            </td>
+                            <td class="dashboard-team-row">
+                                <ul>
+                                    <li>Create export interface with format options</li>
+                                    <li>Implement progress indicators</li>
+                                    <li>Develop saved export configurations</li>
+                                    <li>Create export preview functionality</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Export system</li>
+                                    <li>Multiple export formats</li>
+                                    <li>Report generator</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Week 12</strong></td>
+                            <td class="data-team-row">
+                                <ul>
+                                    <li>Perform comprehensive testing</li>
+                                    <li>Finalize backend documentation</li>
+                                    <li>Create maintenance scripts</li>
+                                    <li>Conduct performance analysis</li>
+                                </ul>
+                            </td>
+                            <td class="dashboard-team-row">
+                                <ul>
+                                    <li>Conduct user acceptance testing</li>
+                                    <li>Fix identified issues</li>
+                                    <li>Create user documentation</li>
+                                    <li>Prepare production deployment</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Finalized system</li>
+                                    <li>Documentation</li>
+                                    <li>Production deployment</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Project Phases Section -->
+        <section id="phases" class="section">
+            <div class="dashboard-header">
+                <h1>Project Phases</h1>
+                <span class="status-pill status-planning">Planning Phase</span>
+            </div>
+            
+            <div class="card">
+                <p>The project will be executed in four distinct phases, each with clear objectives and deliverables:</p>
+                
+                <div id="phase1" class="phase-header">
+                    <h2 class="phase-title">Phase 1: Foundations & Data Collection</h2>
+                    <span class="pill pill-blue">Weeks 1-3</span>
+                </div>
+                <p>During the first phase, the teams will establish the project foundations and implement the core data collection functionality. This includes setting up development environments, creating the OpenChargeMap API connector with E-HDT-specific filtering, designing the Firebase data structure, and developing the initial user interface framework.</p>
+                
+                <div id="phase2" class="phase-header">
+                    <h2 class="phase-title">Phase 2: Analysis & Core Visualization</h2>
+                    <span class="pill pill-green">Weeks 4-6</span>
+                </div>
+                <p>The second phase focuses on implementing analysis capabilities and core visualizations. This includes developing spatial analysis algorithms for corridor identification and coverage assessment, creating the interactive map interface, implementing filtering capabilities, and developing the initial visualization components.</p>
+                
+                <div id="phase3" class="phase-header">
+                    <h2 class="phase-title">Phase 3: Advanced Features & Integration</h2>
+                    <span class="pill pill-purple">Weeks 7-10</span>
+                </div>
+                <p>Phase three concentrates on advanced features and complete integration of the system components. This includes implementing route optimization, real-time synchronization, comparative analysis tools, performance optimization, and the development of a cohesive user experience across all components.</p>
+                
+                <div id="phase4" class="phase-header">
+                    <h2 class="phase-title">Phase 4: Export & Finalization</h2>
+                    <span class="pill pill-orange">Weeks 11-12</span>
+                </div>
+                <p>The final phase focuses on export capabilities and project finalization. This includes implementing export functionality for multiple formats (CSV, KML, Shapefile), comprehensive testing, documentation creation, and preparation for production deployment.</p>
+            </div>
+        </section>
+        
+
+    
+    <div class="card">
+        <p>The E-HDT Charging Infrastructure Project employs a specialized two-team approach, designed to maximize efficiency and parallel development across critical project domains.</p>
+        <div class="flex-row">
+            <div class="flex-col">
+                <div class="card">
+                    <div class="card-title"><i class="fas fa-laptop-code" style="color: var(--notion-green);"></i> Dashboard Team (Frontend)</div>
+                    <div class="card-subtitle">Frontend Development Focus</div>
+                    <ul>
+                        <li>User interface development and interactive visualizations</li>
+                        <li>Map-based representation of charging infrastructure using Leaflet.js</li>
+                        <li>Real-time data binding with Firebase</li>
+                        <li>Filter and export functionality implementation</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex-col">
+                <div class="card">
+                    <div class="card-title"><i class="fas fa-database" style="color: var(--notion-blue);"></i> Data Team (Web Scraping & Analysis)</div>
+                    <div class="card-subtitle">Backend Data Processing Focus</div>
+                    <ul>
+                        <li>Real-time data collection from OpenChargeMap API</li>
+                        <li>Classification of chargers based on E-HDT suitability criteria</li>
+                        <li>Corridor and spatial analysis implementation</li>
+                        <li>Firebase data structure and query optimization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="callout info">
+            <div class="callout-icon"><i class="fas fa-info-circle"></i></div>
+            <div>
+                <p><strong>Collaboration Strategy:</strong> Parallel development with regular integration points to ensure seamless coordination between frontend visualization and backend data processing teams.</p>
+            </div>
+        </div>
+    </div>
+</section>
+        <!-- EU Use Case Section -->
+        <section id="eu-use-case" class="section">
+            <div class="dashboard-header">
+                <h1>EU-Based Use Case</h1>
+                <span class="status-pill status-planning">Planning Phase</span>
+            </div>
+            
+            <div class="card">
+                <p>As the European Green Deal aims to reduce transport emissions by 90% by 2050, logistics companies operating across the Trans-European Transport Network (TEN-T) corridors face significant challenges in planning E-HDT operations.</p>
+
+                <h3>Practical Scenario: Transcontinental Logistics Route Planning</h3>
+                <p>A logistics company based in Rotterdam needs to electrify its fleet for routes connecting to Milan via Germany. Fleet managers require:</p>
+                <ol>
+                    <li>Accurate information about high-capacity charging stations (350kW+) along the TEN-T corridors</li>
+                    <li>Real-time availability status of stations to schedule charging stops</li>
+                    <li>Identification of infrastructure gaps that might require route adjustments or additional charging stops</li>
+                    <li>Data on physical accessibility for 40-ton trucks including height/space requirements</li>
+                </ol>
+
+                <p>Currently, the company struggles with fragmented data sources that primarily focus on passenger vehicle infrastructure. The E-HDT Web Scraper tool will allow them to:</p>
+                <ul>
+                    <li>Identify suitable charging locations along their most frequented routes</li>
+                    <li>Monitor real-time availability of these stations</li>
+                    <li>Export route-specific data to their existing fleet management system</li>
+                    <li>Make data-driven decisions about route planning and charging stops</li>
+                </ul>
+
+                <p>This use case is particularly relevant as the EU's Alternative Fuels Infrastructure Regulation (AFIR) mandates the development of charging infrastructure specifically for heavy-duty vehicles along the TEN-T network, with requirements for stations every 60km by 2025.</p>
+            </div>
+
+            <div class="flex-row">
+                <div class="flex-col">
+                    <div class="card">
+                        <div class="card-title">Key EU Regulations</div>
+                        <ul>
+                            <li><strong>European Green Deal</strong>: 90% transport emissions reduction by 2050</li>
+                            <li><strong>AFIR</strong>: HDV charging every 60km on TEN-T network by 2025</li>
+                            <li><strong>Euro VII</strong>: New emissions standards affecting HDV design</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="flex-col">
+                    <div class="card">
+                        <div class="card-title">Route Challenges</div>
+                        <ul>
+                            <li>1,100+ km route length (Rotterdam-Milan)</li>
+                            <li>Mountain passes requiring additional energy</li>
+                            <li>Cross-border operations through 3+ countries</li>
+                            <li>Different charger network operators in each region</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    <!-- Team Structure Section -->
+<section id="team-structure" class="section">
+    <div class="dashboard-header">
+        <h1>Project Team Structure</h1>
+        <span class="status-pill status-planning">Planning Phase</span>
+    </div>
+        <!-- Detailed Deliverables Section -->
+        <section id="deliverables" class="section">
+            <div class="dashboard-header">
+                <h1>Detailed Deliverables</h1>
+                <span class="status-pill status-planning">Planning Phase</span>
+            </div>
+            
+            <div class="card">
+                <p>The project will produce the following specific deliverables:</p>
+
+                <h3>1. Data Collection Module</h3>
+                <ul>
+                    <li>Python-based API connector for OpenChargeMap with authentication handling</li>
+                    <li>E-HDT-specific filtering system based on:
+                        <ul>
+                            <li>Power output thresholds (≥150kW, ≥350kW, ≥1MW categories)</li>
+                            <li>Compatible connector types (CCS2, MCS)</li>
+                            <li>Physical accessibility parameters</li>
+                        </ul>
+                    </li>
+                    <li>Real-time availability monitoring system with configurable polling intervals</li>
+                    <li>Data validation and cleaning pipeline for ensuring quality</li>
+                </ul>
+
+                <h3>2. Firebase Integration</h3>
+                <ul>
+                    <li>Custom Firebase Realtime Database schema optimized for geospatial queries</li>
+                    <li>GeoFire implementation for efficient location-based data retrieval</li>
+                    <li>Cloud Function-based automation for scheduled data collection and processing</li>
+                    <li>Authentication system with role-based access controls</li>
+                </ul>
+
+                <h3>3. Analysis Engine</h3>
+                <ul>
+                    <li>Corridor identification system using OpenStreetMap data</li>
+                    <li>Coverage gap detection along major transport routes</li>
+                    <li>Charging time calculation based on E-HDT battery specifications</li>
+                    <li>Optimal charger placement recommendation algorithm</li>
+                    <li>Time-based availability pattern analysis</li>
+                </ul>
+
+                <h3>4. Visualization Dashboard</h3>
+                <ul>
+                    <li>Interactive web interface with responsive design</li>
+                    <li>Leaflet.js-based map with custom layers for:
+                        <ul>
+                            <li>Charger locations with real-time status indicators</li>
+                            <li>Coverage analysis along corridors</li>
+                            <li>Charging infrastructure density visualization</li>
+                        </ul>
+                    </li>
+                    <li>Advanced filtering system for charger properties</li>
+                    <li>Customizable dashboard with savable configurations</li>
+                    <li>User account management system</li>
+                </ul>
+
+                <h3>5. Export System</h3>
+                <ul>
+                    <li>Format-specific export handlers for:
+                        <ul>
+                            <li>CSV for spreadsheet analysis with custom field selection</li>
+                            <li>KML for Google Earth visualization with style configurations</li>
+                            <li>Shapefile (SHP) for GIS software with attribute mapping</li>
+                        </ul>
+                    </li>
+                    <li>Custom report generator with visualization snapshots</li>
+                    <li>Integration hooks for external fleet management systems</li>
+                </ul>
+
+                <h3>6. Documentation and Training Materials</h3>
+                <ul>
+                    <li>Comprehensive system documentation including API references</li>
+                    <li>User guides with scenario-based examples</li>
+                    <li>Administrator documentation for system maintenance</li>
+                    <li>Video tutorials for core functionality</li>
+                </ul>
